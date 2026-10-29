@@ -1,2 +1,37 @@
-Please add your pseudocode to this file
-And a written explanation of your solution
+PSEUDOCODE
+
+consecutiveSubstrings(string):
+  results = empty array
+  for start from 0 to length(string) - 1:
+    for end from start + 1 to length(string):
+      results.push(string[start .. end - 1])
+  return results
+
+WRITTEN EXPLANATION
+
+A consecutive substring is fully described by where it starts and where it ends.
+So instead of generating strings and checking whether they are consecutive, I
+enumerate every legal (start, end) pair directly:
+
+- The outer loop picks the starting index. A substring must contain at least one
+  character, so the last legal start is length - 1.
+- The inner loop picks the ending index one past the last included character, so
+  it runs from start + 1 up to and including length.
+- `slice(start, end)` returns exactly the characters between those two indices,
+  which is consecutive by construction, since nothing in between is skipped.
+
+The loops are ordered start first, then end, which produces the substrings in the
+order they appear in the string: all substrings starting at index 0, then all
+substrings starting at index 1, and so on. For 'abc' this gives
+['a', 'ab', 'abc', 'b', 'bc', 'c'].
+
+An empty string never enters the outer loop, so it returns [].
+
+BIG O
+
+- Time: there are n(n + 1) / 2 substrings, and each `slice` copies up to n
+  characters, so the total work is O(n^3) in the worst case (O(n^2) substring
+  extractions). If you count only the number of substrings produced, it is
+  O(n^2).
+- Space: O(n^2) output, since the result holds n(n + 1) / 2 strings whose
+  combined length is O(n^3).
